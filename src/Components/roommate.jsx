@@ -6,18 +6,7 @@ import RoomListingForm from './RoomListingForm';
 import Character from '../images/Screenshot 2024-04-18 at 9.03.03 AM.png';
 
 export default function LandingPage({onPageChange}) {
-  const [selectedButton, setSelectedButton] = useState('');
-
-  const handleButtonClick = (button) => {
-    setSelectedButton(button);
-  };
-  const [selectedOption, setSelectedOption] = useState('Home');
-
-  const handleSelect = (option) => {
-    setSelectedOption(option);
-};
-
-  return (
+ return (
     <div style={{display:"flex", flexDirection:"column", alignItems:"center", gap: "100px"}}>
       <div style={{ fontSize: "70px" }}>
         VIT at ONE PLACE.
@@ -29,35 +18,38 @@ export default function LandingPage({onPageChange}) {
       </div>
 
       <div style={{ fontSize: "25px", marginTop:"20px", display: "flex", flexDirection: "row", gap: "50px"}}>
-          <div style={{width:'60%', backgroundColor:'#5199EB', borderRadius:'20px', display:'flex',flexDirection:"row", padding:"15px"}}>
-            <h3 style={{flexBasis:'80%', fontSize:"20px", justifyContent:'center', alignContent:"center", color:"white"} }  onClick={() => {
-                    handleSelect('Roommate');
-                    onPageChange('roomate');
+          <div style={{cursor:"pointer", width:'60%', backgroundColor:'#5199EB', borderRadius:'20px', display:'flex',flexDirection:"row", padding:"15px"}} onClick={() => {
+                    onPageChange('roommate');
                 }}>
+            <h3 style={{flexBasis:'80%', fontSize:"20px", justifyContent:'center', alignContent:"center", color:"white"} }  >
               Roommate Connect</h3>
           </div>
-          <div style={{width:'60%', backgroundColor:'#5199EB', borderRadius:'20px', display:'flex',flexDirection:"row", padding:"15px"}}>
-            <h3 style={{flexBasis:'80%', fontSize:"20px", justifyContent:'center', alignContent:"center", color:"white"}}>
+          <div style={{cursor:"pointer", width:'60%', backgroundColor:'#5199EB', borderRadius:'20px', display:'flex',flexDirection:"row", padding:"15px"}}onClick={() => {
+                    onPageChange('');
+                }}>
+            <h3 style={{flexBasis:'80%', fontSize:"20px", justifyContent:'center', alignContent:"center", color:"white"}} onClick={() => {
+                    onPageChange('');
+                }}>
               Laundry Management</h3>
           </div>
-          <div style={{width:'60%', backgroundColor:'#5199EB', borderRadius:'20px', display:'flex',flexDirection:"row", padding:"15px"}}>
+          <div style={{cursor:"pointer",width:'60%', backgroundColor:'#5199EB', borderRadius:'20px', display:'flex',flexDirection:"row", padding:"15px"}} onClick={() => {
+                    onPageChange('mess');
+                }}>
             <h3 style={{flexBasis:'80%', fontSize:"20px", justifyContent:'center', alignContent:"center", color:"white"}}>
               Mess Management</h3>
           </div>
-          <div style={{width:'60%', backgroundColor:'#5199EB', borderRadius:'20px', display:'flex',flexDirection:"row", padding:"15px"}}>
+          <div style={{cursor:"pointer",width:'60%', backgroundColor:'#5199EB', borderRadius:'20px', display:'flex',flexDirection:"row", padding:"15px"}} onClick={() => {
+                    onPageChange('hostelInfo');
+                }}>
             <h3 style={{flexBasis:'80%', fontSize:"20px", justifyContent:'center', alignContent:"center", color:"white"}}>
               Hostel Benefit Hub</h3>
           </div>
-          <div style={{width:'60%', backgroundColor:'#5199EB', borderRadius:'20px', display:'flex',flexDirection:"row", padding:"15px"}}>
+          <div style={{cursor:"pointer", width:'60%', backgroundColor:'#5199EB', borderRadius:'20px', display:'flex',flexDirection:"row", padding:"15px"}} onClick={() => {
+                    onPageChange('taxiShare');
+                }}>
             <h3 style={{flexBasis:'80%', fontSize:"20px", justifyContent:'center', alignContent:"center", color:"white"}}>
             Taxi Management</h3>
           </div>
-        {selectedButton === 'find' && <div style={{ marginTop: "20px" }}>
-          <SearchComponent />
-        </div>}
-        {selectedButton === 'list' && <div style={{ marginTop: "20px" }}>
-          <RoomListingForm />
-        </div>}
       </div>
     </div>
   );

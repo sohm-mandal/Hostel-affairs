@@ -1,10 +1,12 @@
-// Navbar.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import roomConnectImage from '../images/Profile-Male-PNG.png';
 import ProfileDropdown from './ProfileDropdown';
 import './Navbar.css';
 
 const Navbar = ({ onPageChange, currentPage }) => {
+    useEffect(() => {
+        setSelectedOption(currentPage);
+    }, [currentPage]);
 
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [selectedOption, setSelectedOption] = useState(currentPage);
@@ -38,10 +40,10 @@ const Navbar = ({ onPageChange, currentPage }) => {
                 Home
             </div>
             <div
-                className={`nav-option${selectedOption === 'Roommate' ? ' selected' : ''}`}
+                className={`nav-option${selectedOption === 'roommate' ? ' selected' : ''}`}
                 onClick={() => {
                     handleSelect('Roommate');
-                    onPageChange('roomate');
+                    onPageChange('roommate');
                 }}
             >
                 Roommate Connect
@@ -56,7 +58,7 @@ const Navbar = ({ onPageChange, currentPage }) => {
                 Laundry Management
             </div>
             <div
-                className={`nav-option${selectedOption === 'whatsapp' ? ' selected' : ''}`}
+                className={`nav-option${selectedOption === 'mess' ? ' selected' : ''}`}
                 onClick={() => {
                     handleSelect('mess');
                     onPageChange('mess');

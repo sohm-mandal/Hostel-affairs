@@ -23,12 +23,12 @@ const Home = () => {
   return (
     <div className="container" style={{display:'flex', flexDirection:"column", justifyContent:"space-between"}}>
       <div>
-        <Navbar onPageChange = {handleNavigation}/>
+        <Navbar onPageChange = {handleNavigation} currentPage={currentPage}/>
       </div>
       <br />
       <div>
-      {currentPage === 'home' && <LandingPage onPageChange={handleNavigation} currentPage={currentPage} />}
-      {currentPage === "roomate" && <Roomate />}
+      {currentPage === 'home' && <LandingPage onPageChange={handleNavigation}/>}
+      {currentPage === "roommate" && <Roomate />}
       {currentPage === "mess" && <Mess />}
       {currentPage === 'profilePage' && <Profile/>}
       {currentPage === 'hostelInfo' && <HostelInfo onPageChange = {handleNavigation}/>}
