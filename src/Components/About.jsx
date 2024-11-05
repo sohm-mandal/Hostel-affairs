@@ -12,6 +12,13 @@ const About = () => {
 
 List your available room or search for rooms based on location, budget, and more. Our mission is to make finding roommates and accommodation easier, so you can enjoy a smooth transition to university life.</p>
       </div>
+      <div style={{
+    display: "flex",
+    flexWrap: "wrap",
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center"
+}}>
       <div className="row">
         <TeamInfo 
           name="Soham Mandal"
@@ -53,6 +60,7 @@ List your available room or search for rooms based on location, budget, and more
           name="Adyasha Pattanaik"
           position="Frontend"
         />
+      </div>
       </div>
     </div>
   );
