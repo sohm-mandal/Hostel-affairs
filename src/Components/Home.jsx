@@ -10,7 +10,8 @@ import HostelInfo from "./HostelInfo";
 import WhatsApp from "./WhatsApp";
 import TaxiShare from "./TaxiShare";
 import LandingPage from "./roommate";
-
+import Mess
+ from "./Mess";
 const Home = () => {
 
   const [currentPage, setCurrentPage]  = useState('home');
@@ -28,6 +29,7 @@ const Home = () => {
       <div>
       {currentPage === 'home' && <LandingPage onPageChange={handleNavigation} currentPage={currentPage} />}
       {currentPage === "roomate" && <Roomate />}
+      {currentPage === "mess" && <Mess />}
       {currentPage === 'profilePage' && <Profile/>}
       {currentPage === 'hostelInfo' && <HostelInfo onPageChange = {handleNavigation}/>}
       {currentPage === 'whatsApp' && <WhatsApp/>}

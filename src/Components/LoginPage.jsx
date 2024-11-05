@@ -166,6 +166,7 @@ const Login = () => {
         flexBasis: "100%",
         flexDirection: "column",
         textAlign: "left",
+        paddingTop: "0 !important",
         background:
           "linear-gradient(90deg, rgba(15,46,173,0.8646052170868348) 0%, rgba(0,140,255,0.8982186624649859) 66%)",
       }}

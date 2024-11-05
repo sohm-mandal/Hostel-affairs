@@ -13,20 +13,59 @@ const SearchComponent = () => {
       setLoading(true);
       try {
         const collectionRef = collection(firestore, "rooms");
-        const q = query(collectionRef, where("roomNumber", "==", searchQuery));
-        const snapshot = await getDocs(q);
+    
+        // Using `startAt` and `endAt` to perform range queries for each field
+        const stateQuery = query(
+          collectionRef,
+          where("state", ">=", searchQuery),
+          where("state", "<=", searchQuery + "\uf8ff")
+        );
+    
+        const hobbiesQuery = query(
+          collectionRef,
+          where("hobbies", ">=", searchQuery),
+          where("hobbies", "<=", searchQuery + "\uf8ff")
+        );
+    
+        const messQuery = query(
+          collectionRef,
+          where("mess", ">=", searchQuery),
+          where("mess", "<=", searchQuery + "\uf8ff")
+        );
+    
+        // Execute all queries and merge the results
+        const [stateSnapshot, hobbiesSnapshot, messSnapshot] = await Promise.all([
+          getDocs(stateQuery),
+          getDocs(hobbiesQuery),
+          getDocs(messQuery),
+        ]);
+    
+        // Collect all matching documents
         const searchData = [];
-        snapshot.forEach((doc) => {
-          const {name,roomNumber,blockName,regNo,email,phoneNumber} = doc.data();
-          searchData.push({name,roomNumber,blockName,regNo,email,phoneNumber});
-        });
-        setSearchResults(searchData);
+    
+        const processSnapshot = (snapshot) => {
+          snapshot.forEach((doc) => {
+            const { name, blockName, regNo, email, phoneNumber, state, hobbies, mess } = doc.data();
+            searchData.push({ name, blockName, regNo, email, phoneNumber, state, hobbies, mess });
+          });
+        };
+    
+        // Process each snapshot
+        processSnapshot(stateSnapshot);
+        processSnapshot(hobbiesSnapshot);
+        processSnapshot(messSnapshot);
+    
+        // Remove duplicates if necessary
+        const uniqueSearchData = Array.from(new Set(searchData.map(JSON.stringify))).map(JSON.parse);
+    
+        setSearchResults(uniqueSearchData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
+    
 
     if (searchQuery) {
       getData();

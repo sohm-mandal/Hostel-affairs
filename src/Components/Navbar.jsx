@@ -58,8 +58,8 @@ const Navbar = ({ onPageChange, currentPage }) => {
             <div
                 className={`nav-option${selectedOption === 'whatsapp' ? ' selected' : ''}`}
                 onClick={() => {
-                    handleSelect('whatsapp');
-                    onPageChange('whatsApp');
+                    handleSelect('mess');
+                    onPageChange('mess');
                 }}
             >
                 Mess Management

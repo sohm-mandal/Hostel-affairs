@@ -1,4 +1,4 @@
-/* 
+
 .wrapper {
   display: flex;
   position: relative;
@@ -19,4 +19,4 @@
 
 .wrapper.active .sign-up {
   transform: translateX(0);
-} */
+}

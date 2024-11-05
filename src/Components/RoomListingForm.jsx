@@ -28,10 +28,10 @@ const RoomListingForm = () => {
       setFormData({
         name: "",
         regNo: "",
-        email: "",
         phoneNumber: "",
-        blockName: "",
-        roomNumber: "",
+        state: "",
+        hobies: "",
+        mess: "",
       });
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -107,11 +107,11 @@ const RoomListingForm = () => {
       </div>
       <div>
         <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
+          type="text"
+          id="state"
+          name="state"
+          placeholder="State"
+          value={formData.state}
           onChange={handleChange}
           required
           style={{
@@ -127,10 +127,10 @@ const RoomListingForm = () => {
       <div>
         <input
           type="text"
-          id="blockName"
-          name="blockName"
-          placeholder="Block Name"
-          value={formData.blockName}
+          id="hobies"
+          name="hobies"
+          placeholder="Hobies"
+          value={formData.hobies}
           onChange={handleChange}
           required
           style={{
@@ -144,11 +144,11 @@ const RoomListingForm = () => {
       </div>
       <div>
         <input
-          type="number"
-          id="roomNumber"
-          name="roomNumber"
-          placeholder="Room No."
-          value={formData.roomNumber}
+          type="text"
+          id="mess"
+          name="mess"
+          placeholder="Mess Type"
+          value={formData.mess}
           onChange={handleChange}
           required
           style={{
