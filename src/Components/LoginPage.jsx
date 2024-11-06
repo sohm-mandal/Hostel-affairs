@@ -96,6 +96,8 @@ const Login = () => {
       setLoading(true);
       const response = await axiosInstance.post("/api/auth/login", { email, password });
       localStorage.setItem("authToken", response.data.token);
+      localStorage.setItem("email", response.data.email);
+      
       window.location.href = "/home"; // Replacing navigate with window.location.href
       toast.success("Logged in successfully!");
       setIsLoggedIn(true);
