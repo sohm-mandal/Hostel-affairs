@@ -6,15 +6,18 @@ const dbConfig = require("./config/dbconfig");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const User = require("./models/user");
+const Taxi = require("./models/taxi");
+
 const jwt = require("jsonwebtoken");
 
+app.use(express.json()); 
 app.use(cors({
   origin: "http://localhost:3000", 
   methods: "GET,POST,PUT,DELETE", 
-  allowedHeaders: "Content-Type,Authorization" 
+  allowedHeaders: "Content-Type, Authorization, Email" 
 }));
 
-app.use(express.json()); 
+
 const verifyToken = (req, res, next) => {
   const token = req.header("Authorization")?.replace("Bearer ", ""); 
 
@@ -42,6 +45,99 @@ const verifyToken = (req, res, next) => {
     }
   });
 };
+
+app.post('/api/taxi/book', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const taxi = await Taxi.findById(req.body.taxi._id);
+    if (!taxi || taxi.passengers <= 0) {
+      return res.status(400).json({ success: false, message: 'Taxi not available' });
+    }
+
+    taxi.passengers -= 1;
+    taxi.passengerEmails = taxi.passengerEmails || []; // Initialize if not present
+    taxi.passengerEmails.push(email); // Add the user's email
+
+    await taxi.save();
+
+    res.json({ success: true, message: 'Taxi booked successfully' });
+  } catch (error) {
+    console.error('Error booking taxi:', error);
+    res.status(500).json({ success: false, message: 'Error booking taxi' });
+  }
+});
+
+app.get('/api/taxi/booked-taxis', async (req, res) => {
+  try {
+    const {email} = req.headers; // Retrieve user email from headers
+    
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+
+    // Find all taxis where the user's email is in the passengerEmail array
+    const bookedTaxis = await Taxi.find({
+      passengerEmails: { $in: [email] }, // Check if the user's email is in the passengerEmail array
+    });
+
+    // Respond with the found taxis
+    res.json({ success: true, data: bookedTaxis });
+  } catch (error) {
+    console.error('Error fetching booked taxis:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+
+app.post('/api/taxi', async (req, res) => {
+  try {
+    
+    const lister = req.headers.email;
+    const { from, to, date, passengers } = req.body;
+
+    const newTaxiListing = new Taxi({
+      from,
+      to,
+      date,
+      passengers,
+      lister,
+      passengerEmails: [lister],
+    });
+
+    await newTaxiListing.save();
+    res.status(201).json({ message: 'Taxi listing created successfully!' });
+
+  } catch (error) {
+    console.error('Error creating taxi listing:', error);
+    res.status(500).json({ message: 'Error creating taxi listing' });
+  }
+});
+
+app.post('/api/taxi/search-taxi', async (req, res) => {
+  const { searchQuery } = req.body;
+  const email  = req.headers.email;
+
+  try {
+    const regex = new RegExp(searchQuery, 'i');
+
+    const taxis = await Taxi.find({
+      $and: [
+        {
+          $or: [
+            { from: { $regex: regex } },
+            { to: { $regex: regex } }
+          ]
+        },
+        { passengerEmails: { $not: { $in: [email] } } }
+      ]
+    });
+
+    res.status(200).json({ success: true, data: taxis });
+  } catch (error) {
+    console.error('Error fetching taxis:', error);
+    res.status(500).json({ success: false, message: 'Error fetching taxis' });
+  }
+});
 
 app.post("/api/user/update", async (req, res) => {
  const { email, name, regNo, phoneNumber, blockName, roomNumber } = req.body;

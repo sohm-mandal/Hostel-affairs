@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { collection, addDoc } from 'firebase/firestore'; // Import Firestore functions
-import { firestore } from '../firebase'; // Import the Firebase app instance
 import { toast } from "react-toastify";
 
 const TaxiListingForm = () => {
@@ -19,18 +17,34 @@ const TaxiListingForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const docRef = await addDoc(collection(firestore, 'rooms/lrtQnoUWmxkGv2gKeup2/taxiInfo'), formData);
-            toast.success("Form Submitted Successfully");
-            console.log('Document written with ID: ', docRef.id);
-            // Clear the form fields after successful submission
-            setFormData({
-                from: '',
-                to: '',  
-                date: '',
-                passengers: ''
+            const userEmail = localStorage.getItem('email'); // Assuming 'authToken' is the key used to store the token
+        // If there is no token in localStorage, you might want to handle it here
+            const response = await fetch('http://localhost:5000/api/taxi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'email' : userEmail
+
+                },
+                body: JSON.stringify(formData),
             });
+
+            const data = await response.json();
+            if (response.ok) {
+                toast.success(data.message);
+                console.log('Taxi listing created successfully');
+                setFormData({
+                    from: '',
+                    to: '',  
+                    date: '',
+                    passengers: ''
+                });
+            } else {
+                toast.error(data.message);
+            }
         } catch (error) {
-            console.error('Error adding document: ', error);
+            console.error('Error adding taxi listing:', error);
+            toast.error('Error adding taxi listing');
         }
     };
 

@@ -4,7 +4,6 @@ import { useFirebase } from "../Context/FirebaseContext";
 
 const ProtectedRoutes = ({ children }) => {
   const authToken = localStorage.getItem("authToken");
-  console.log(authToken);
   if (!authToken) {
     return <Navigate to="/" />;
   }

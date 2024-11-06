@@ -76,6 +76,7 @@ function App() {
             path="/"
             element={localStorage.getItem('authToken') ? <Navigate to="/home" /> : <Login onLogin={handleLogin} />}
           />
+
           <Route
             path="/home"
             element={
