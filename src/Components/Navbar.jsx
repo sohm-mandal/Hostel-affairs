@@ -31,7 +31,7 @@ const Navbar = ({ onPageChange, currentPage }) => {
             <div className='headname' style={{ display: 'flex', flexBasis: '' }}><span style={{ fontSize: '20px', fontWeight: 'bold', alignContent: "center" }}>Room Connect</span></div>
             <div className='navbar' style={{ display: 'flex', flexDirection: "row", alignItems: 'flex-end', flexBasis: "45%", alignContent: 'space-evenly', fontSize: '16px' }} >
             <div
-                className={`nav-option${selectedOption === 'Home' ? ' selected' : ''}`}
+                className={`nav-option${selectedOption === 'home' ? ' selected' : ''}`}
                 onClick={() => {
                     handleSelect('Home');
                     onPageChange('home');
@@ -49,7 +49,7 @@ const Navbar = ({ onPageChange, currentPage }) => {
                 Roommate Connect
             </div>
             <div
-                className={`nav-option${selectedOption === 'hostels' ? ' selected' : ''}`}
+                className={`nav-option${selectedOption === 'hostelInfo' ? ' selected' : ''}`}
                 onClick={() => {
                     handleSelect('hostels');
                     onPageChange('hostelInfo');
@@ -67,7 +67,7 @@ const Navbar = ({ onPageChange, currentPage }) => {
                 Mess Management
             </div>
             <div
-                className={`nav-option${selectedOption === 'hostels' ? ' selected' : ''}`}
+                className={`nav-option${selectedOption === 'hostelInfo' ? ' selected' : ''}`}
                 onClick={() => {
                     handleSelect('hostels');
                     onPageChange('hostelInfo');
@@ -85,7 +85,7 @@ const Navbar = ({ onPageChange, currentPage }) => {
                 TaxiShare
             </div>
             <div
-                className={`nav-option${selectedOption === 'About' ? ' selected' : ''}`}
+                className={`nav-option${selectedOption === 'aboutPage' ? ' selected' : ''}`}
                 onClick={() => {
                     handleSelect('About');
                     onPageChange('aboutPage');
