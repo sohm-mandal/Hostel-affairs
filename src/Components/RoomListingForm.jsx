@@ -1,3 +1,5 @@
+// RoomListingForm.jsx
+
 import React, { useState } from "react";
 import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
 import { firestore } from "../firebase"; // Import the Firebase app instance
@@ -9,8 +11,9 @@ const RoomListingForm = () => {
     regNo: "",
     email: "",
     phoneNumber: "",
-    blockName: "",
-    roomNumber: "",
+    state: "",
+    hobies: "",
+    mess: "",
   });
 
   const handleChange = (e) => {
@@ -24,10 +27,12 @@ const RoomListingForm = () => {
       const docRef = await addDoc(collection(firestore, "rooms"), formData);
       toast.success("Form Submitted Successfully");
       console.log("Document written with ID: ", docRef.id);
+      
       // Clear the form fields after successful submission
       setFormData({
         name: "",
         regNo: "",
+        email: "",
         phoneNumber: "",
         state: "",
         hobies: "",
@@ -35,6 +40,7 @@ const RoomListingForm = () => {
       });
     } catch (error) {
       console.error("Error adding document: ", error);
+      toast.error("Error submitting form. Please try again.");
     }
   };
 
@@ -89,6 +95,24 @@ const RoomListingForm = () => {
       </div>
       <div>
         <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginBottom: "20px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+          }}
+        />
+      </div>
+      <div>
+        <input
           type="tel"
           id="phoneNumber"
           name="phoneNumber"
@@ -123,13 +147,12 @@ const RoomListingForm = () => {
           }}
         />
       </div>
-      
       <div>
         <input
           type="text"
           id="hobies"
           name="hobies"
-          placeholder="Hobies"
+          placeholder="hobbies"
           value={formData.hobies}
           onChange={handleChange}
           required
@@ -143,11 +166,9 @@ const RoomListingForm = () => {
         />
       </div>
       <div>
-        <input
-          type="text"
+        <select
           id="mess"
           name="mess"
-          placeholder="Mess Type"
           value={formData.mess}
           onChange={handleChange}
           required
@@ -158,7 +179,12 @@ const RoomListingForm = () => {
             border: "1px solid #ccc",
             borderRadius: "5px",
           }}
-        />
+        >
+          <option value="">Select Mess Type</option>
+          <option value="Vegetarian">Vegetarian</option>
+          <option value="Non-Vegetarian">Non-Vegetarian</option>
+          <option value="Special">Special</option>
+        </select>
       </div>
       <button
         type="submit"
