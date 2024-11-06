@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch} from 'react-router-dom'; 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axiosInstance from "../axiosInstance";
 import styled from "styled-components";
 import { useFirebase } from "../Context/FirebaseContext";
 import LoadingOverlay from "./LoadingOverlay"; // Importing the LoadingOverlay component
@@ -37,31 +39,28 @@ const SignInContainer = styled.div`
 
 
 const Login = () => {
-  const navigate = useNavigate();
+  const history = useNavigate(); // Use useHistory for navigation
   const [isLoginFormVisible, setIsLoginFormVisible] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signUp, logIn, googleLogin } = useFirebase();
   const [isHovered, setIsHovered] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     // Check if authentication token exists in session storage or local storage
-    const authToken = localStorage.getItem('authToken'); // or sessionStorage
+    const authToken = localStorage.getItem("authToken");
 
     if (authToken) {
-      // If authentication token exists, consider user logged in
       setIsLoggedIn(true);
     }
   }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/home"); // Redirect to home page if logged in
+      window.location.href = "/home"; // Replacing navigate with window.location.href
     }
-  }, [isLoggedIn, navigate]);
-
+  }, [isLoggedIn]);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -80,12 +79,14 @@ const Login = () => {
   const handleLoginWithGoogle = async (e) => {
     e.preventDefault();
     try {
-      await googleLogin();
-      navigate("/home");
+      const response = await axiosInstance.get("/api/auth/google-login");
+      localStorage.setItem("authToken", response.data.token);
+      window.location.href = "/home"; // Replacing navigate with window.location.href
       toast.success("Logged in successfully!");
       setIsLoggedIn(true);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      toast.error("An error occurred during Google login.");
     }
   };
 
@@ -93,26 +94,14 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      await logIn(email, password);
-      navigate("/home");
+      const response = await axiosInstance.post("/api/auth/login", { email, password });
+      localStorage.setItem("authToken", response.data.token);
+      window.location.href = "/home"; // Replacing navigate with window.location.href
       toast.success("Logged in successfully!");
       setIsLoggedIn(true);
     } catch (error) {
-      const errorCode = error.code;
-      switch (errorCode) {
-        case "auth/invalid-email":
-          toast.error("Invalid Email. Please try again.");
-          break;
-        case "auth/invalid-credential":
-          toast.error("Invalid Credentials. Please try again.");
-          break;
-        case "auth/missing-password":
-          toast.error("Missing Credentials. Please try again.");
-          break;
-        default:
-          toast.error("An error occurred. Please try again later.");
-          break;
-      }
+      const errorMessage = error.response?.data?.message || "An error occurred.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -121,40 +110,18 @@ const Login = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      await signUp(email, password);
+      const response = await axiosInstance.post("/api/auth/signup", { email, password });
       toast.success("User registered successfully!");
       setEmail("");
       setPassword("");
       handleToggleForms();
       setIsLoggedIn(true);
     } catch (error) {
-      const errorCode = error.code;
-      switch (errorCode) {
-        case "auth/invalid-email":
-          toast.error("Invalid Email. Please try again.");
-          break;
-        case "auth/invalid-credential":
-          toast.error("Invalid Credentials. Please try again.");
-          break;
-        case "auth/missing-password":
-          toast.error("Missing Credentials. Please try again.");
-          break;
-        case "auth/weak-password":
-          toast.error(
-            "Password should be at least 6 characters. Please try again."
-          );
-          break;
-        case "auth/email-already-in-use":
-          toast.error("Email already registered. Please Log In.");
-          handleToggleForms();
-          break;
-        default:
-          toast.error("An error occurred. Please try again later.");
-          break;
-      }
-      console.log(error);
+      const errorMessage = error.response?.data?.message || "An error occurred.";
+      toast.error(errorMessage);
     }
   };
+
 
   return (
     <div

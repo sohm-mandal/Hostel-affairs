@@ -94,11 +94,21 @@ const Navbar = ({ onPageChange, currentPage }) => {
                 About
             </div>
             </div>
+
             <div className='profile_pic'>
-                <img src={roomConnectImage} alt="Profile" style={{ height: "30px", cursor: "pointer" }} onClick={toggleDropdown} />
+            <img 
+  src={roomConnectImage} 
+  alt="Profile" 
+  style={{ height: "30px", cursor: "pointer" }} 
+  onClick={() => {
+    localStorage.removeItem("authToken"); // Remove the auth token
+    window.location.href = "/"; // Redirect to the login page
+  }} 
+/>
                 {dropdownVisible && <ProfileDropdown onPageChange={onPageChange} />}
             </div>
-            {dropdownVisible && <div className="overlay" onClick={closeDropdown}></div>}
+            {dropdownVisible && <div className="overlay" onClick={closeDropdown}></div>
+            }
         </div>
     );
 };

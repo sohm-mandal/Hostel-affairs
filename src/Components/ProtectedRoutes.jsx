@@ -3,11 +3,12 @@ import { Navigate } from "react-router-dom";
 import { useFirebase } from "../Context/FirebaseContext";
 
 const ProtectedRoutes = ({ children }) => {
-  let { user } = useFirebase();
-  console.log(user);
-  if (!user) {
+  const authToken = localStorage.getItem("authToken");
+  console.log(authToken);
+  if (!authToken) {
     return <Navigate to="/" />;
   }
+
   return children;
 };
 

@@ -4,7 +4,18 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+    },
+    reg_no: {
+      type: String,
+    },
+    mess: {
+      type: String,
+    },
+    hobies: {
+      type: Array,
+    },
+    state:{
+      type: String,
     },
     email: {
       type: String,
@@ -14,30 +25,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    reset_token: {
-      type: String,
-      default: "",
-    },
-    verification_token: {
-      type: String,
-      default: new Date().getTime(),
-    },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
-    uploaded: {
-      type: Array,
-      default: [],
-    },
-    sharedWithMe: {
-      type: Array,
-      default: [],
-    },
-    usedStorage:{
-      type: Number,
-      default: 0,
-    }
   },
   {
     timestamps: true,
