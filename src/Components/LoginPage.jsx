@@ -113,10 +113,12 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axiosInstance.post("/api/auth/signup", { email, password });
+      localStorage.setItem("authToken", response.data.token);
+      localStorage.setItem("email", response.data.email);
+      
       toast.success("User registered successfully!");
-      setEmail("");
-      setPassword("");
-      handleToggleForms();
+      window.location.href = "/home"; // Replacing navigate with window.location.href
+      
       setIsLoggedIn(true);
     } catch (error) {
       const errorMessage = error.response?.data?.message || "An error occurred.";
