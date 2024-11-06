@@ -1,4 +1,4 @@
-// Home.jsx
+
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,7 +11,8 @@ import WhatsApp from "./WhatsApp";
 import TaxiShare from "./TaxiShare";
 import LandingPage from "./roommate";
 import Mess
- from "./Mess";
+from "./Mess";
+
 const Home = () => {
 
   const [currentPage, setCurrentPage]  = useState('home');
