@@ -7,17 +7,16 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const User = require("./models/user");
 const jwt = require("jsonwebtoken");
-// Use CORS middleware
+
 app.use(cors({
-  origin: "http://localhost:3000", // Allow requests from the frontend running on this port
-  methods: "GET,POST,PUT,DELETE", // Allow these HTTP methods
-  allowedHeaders: "Content-Type,Authorization" // Allow these headers
+  origin: "http://localhost:3000", 
+  methods: "GET,POST,PUT,DELETE", 
+  allowedHeaders: "Content-Type,Authorization" 
 }));
 
-app.use(express.json()); // Parses incoming JSON requests
-
+app.use(express.json()); 
 const verifyToken = (req, res, next) => {
-  const token = req.header("Authorization")?.replace("Bearer ", ""); // Extract token from Authorization header
+  const token = req.header("Authorization")?.replace("Bearer ", ""); 
 
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
@@ -44,6 +43,48 @@ const verifyToken = (req, res, next) => {
   });
 };
 
+app.post("/api/user/update", async (req, res) => {
+ const { email, name, regNo, phoneNumber, blockName, roomNumber } = req.body;
+
+    // Connect to the MongoDB database
+    const { db } = await connectToDatabase();
+
+    try {
+      // Find the user by email
+      const user = await db.collection("users").findOne({ email });
+
+      if (!user) {
+        // If the user doesn't exist, return an error
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Prepare the update object with the new fields
+      const updateData = {};
+
+      if (name) updateData.name = name;
+      if (regNo) updateData.regNo = regNo;
+      if (phoneNumber) updateData.phoneNumber = phoneNumber;
+      if (blockName) updateData.blockName = blockName;
+      if (roomNumber) updateData.roomNumber = roomNumber;
+
+      // Update the user's document
+      const updatedUser = await db.collection("users").updateOne(
+        { email },
+        { $set: updateData } // Use $set to update only the provided fields
+      );
+
+      // If no fields were updated, return an appropriate message
+      if (updatedUser.modifiedCount === 0) {
+        return res.status(400).json({ message: "No fields to update" });
+      }
+
+      // Return the updated user document
+      return res.status(200).json({ message: "User updated successfully" });
+    } catch (error) {
+      console.error("Error updating user: ", error);
+      return res.status(500).json({ message: "Server error" });
+    }
+});
 app.get("/api/auth/verify-token", verifyToken, (req, res) => {
   // Send the user data back in the response if the token is valid
   res.status(200).json({ user: req.user });
